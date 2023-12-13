@@ -8,6 +8,10 @@ extern uint32_t _edtext;
 extern uint32_t _sbss;
 extern uint32_t _ebss;
 extern uint32_t __main_stack_end__;
+extern uint32_t __ram_start__;
+extern uint32_t __ram_size__;
+extern uint32_t __seed_start__;
+extern uint32_t __seed_size__;
 
 /* Pointer to the Cortex vector table (located at offset 0) */
 extern uint32_t *_vectors;
@@ -22,9 +26,25 @@ void memcpy32(uint32_t *src, uint32_t *dest, uint32_t count) {
     *dest++ = *src++;
 }
 
+__attribute__ ((section(".startup"), noinline))
+void __attribute__ ((noinline)) trng_gen_seed256(uint32_t *seed, uint32_t *ram, uint32_t ram_size) {
+  uint32_t size = ram_size / sizeof(*ram);
+  unsigned int word = 0;
+  unsigned int nwords = 8;
+  while (size--){
+    seed[word] ^= *ram++;
+    word = (word+1)%nwords;
+  }
+}
+
 __attribute__ ((section(".startup")))
 static void init_crt(void) {
-
+  //generate seed from uninitialized RAM
+  uint32_t *seed = &__seed_start__;
+  uint32_t *ram = &__ram_start__;
+  uint32_t ram_size = (uint32_t)&__ram_size__;
+  trng_gen_seed256(seed, ram, ram_size);
+  
   /* Relocate data and text sections to RAM */
   memcpy32(&_eflash, &_sdtext, (uint32_t)&_edtext - (uint32_t)&_sdtext);
 

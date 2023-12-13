@@ -12,7 +12,7 @@
 MEMORY
 {
   FLASH (rx) : ORIGIN = 0x00004000, LENGTH = 0xC000
-  RAM (rwx)  : ORIGIN = 0x20000000 + 8, LENGTH = 0x2000 - 8
+  RAM (rwx)  : ORIGIN = 0x20000000 + 8, LENGTH = 0x2000 - 8 - 32
 }
 
 ENTRY(Reset_Handler)

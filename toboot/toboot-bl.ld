@@ -8,7 +8,8 @@ MEMORY
 {
     bl_flash   :  org = 0x00000000,  len = 8k,
     app_flash  :  org = 0x00004000,  len = 0xC000,
-    ram        :  org = 0x20000008,  len = 8k - 8
+    ram        :  org = 0x20000008,  len = 8k - 8 - 32
+    seed       :  org = 0x20001FE0,  len = 32
 }
 
 __bl_start__            = ORIGIN(bl_flash);
@@ -19,6 +20,8 @@ __app_end__             = __app_start__ + LENGTH(app_flash);
 __ram_start__           = ORIGIN(ram);
 __ram_size__            = LENGTH(ram);
 __ram_end__             = __ram_start__ + __ram_size__;
+__seed_start__           = ORIGIN(seed);
+__seed_size__            = LENGTH(seed);
 boot_token = ORIGIN(ram) - 8;
 
 SECTIONS
