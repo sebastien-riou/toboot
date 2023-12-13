@@ -1,0 +1,9 @@
+#!/bin/bash
+
+set -e
+
+cd toboot
+make clean
+cd ../booster
+rm -f make-booster toboot-booster.bin toboot-booster.dfu
+make clean

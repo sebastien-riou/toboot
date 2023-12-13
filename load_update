@@ -1,0 +1,4 @@
+#!/bin/bash
+
+set -e
+dfu-util -d 1209:70b1 -D booster/toboot-booster.dfu

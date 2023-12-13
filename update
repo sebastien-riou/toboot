@@ -1,17 +1,6 @@
 #!/bin/bash
 
 set -e
-
-cd toboot
-make clean
-make
-cd ../booster
-rm -f make-booster toboot-booster.bin toboot-booster.dfu
-make clean
-make
-gcc make-booster.c -o make-booster
-chmod +x make-booster
-./make-booster ../toboot/toboot.bin toboot-booster.bin
-cp toboot-booster.bin toboot-booster.dfu
-dfu-suffix --pid 0x70b1 --vid 0x1209 --add toboot-booster.dfu
-dfu-util -d 1209:70b1 -D toboot-booster.dfu
+./clean
+./build
+./load_update
